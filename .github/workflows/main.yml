@@ -14,5 +14,5 @@ jobs:
 
       - name: Start ffmpeg stream
         run: |
-          chmod +x ssh.sh
-          ./ssh.sh
+          chmod +x ss.sh
+          ./ss.sh
