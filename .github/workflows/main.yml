@@ -1,4 +1,4 @@
-name: Continuous Streaming
+name: CI/CD Pipeline
 
 on:
   push:
@@ -6,13 +6,25 @@ on:
       - main
 
 jobs:
-  stream:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
 
-      - name: Start ffmpeg stream
-        run: |
-          chmod +x ss.sh
-          ./ss.sh
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup APT
+      uses: actions/setup-apt@v2
+      with:
+        # Add repository containing ffmpeg package
+        repository: "deb http://deb.debian.org/debian buster main"
+        key_url: "https://ftp-master.debian.org/keys/archive-key-$(lsb_release -cs).asc"
+
+    - name: Install ffmpeg
+      run: sudo apt update && sudo apt install -y ffmpeg
+
+    - name: Make script executable
+      run: chmod +x ss.sh
+
+    - name: Start ffmpeg stream
+      run: ./ss.sh
